@@ -1,0 +1,17 @@
+# Gradle files
+.gradle/
+build/
+/*/build/
+
+# APK/AAB files
+*.apk
+*.aab
+
+# Android Studio/IntelliJ files (though not strictly necessary here, good practice)
+.idea/
+*.iml
+*.hprof
+
+# Keystore files
+*.jks
+*.keystore
