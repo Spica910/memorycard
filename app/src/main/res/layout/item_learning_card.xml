@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardViewRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
+    android:layout_margin="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/glass_card_background"
+    app:strokeColor="@color/glass_card_stroke"
+    app:strokeWidth="1dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/textViewCardText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceHeadline4"
+                android:textColor="@color/glass_text_primary"
+                android:textAlignment="center"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="24dp"
+                android:paddingBottom="24dp"
+                tools:text="Learning Content" />
+
+            <LinearLayout
+                android:id="@+id/layoutDetailedInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible"> <!-- tools:visibility for preview -->
+
+                <TextView
+                    android:id="@+id/textViewEtymologyLabel"
+                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:textColor="@color/glass_text_secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="어원:" />
+                <TextView
+                    android:id="@+id/textViewEtymology"
+                    android:textColor="@color/glass_text_primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    tools:text="Origin of the word..." />
+
+                <TextView
+                    android:id="@+id/textViewMnemonicLabel"
+                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:textColor="@color/glass_text_secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="암기법:" />
+                <TextView
+                    android:id="@+id/textViewMnemonic"
+                    android:textColor="@color/glass_text_primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    tools:text="Easy way to remember..." />
+
+                <Button
+                    android:id="@+id/buttonPlayPronunciation"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:textColor="@color/glass_text_primary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginBottom="8dp"
+                    android:text="발음 듣기" />
+
+                <TextView
+                    android:id="@+id/textViewExamplesLabel"
+                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:textColor="@color/glass_text_secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="예문:" />
+                <TextView
+                    android:id="@+id/textViewExamples"
+                    android:textColor="@color/glass_text_primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Example 1...\nExample 2..." />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</com.google.android.material.card.MaterialCardView>
