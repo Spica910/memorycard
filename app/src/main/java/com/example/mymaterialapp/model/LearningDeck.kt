@@ -9,8 +9,10 @@ import java.util.UUID
 data class LearningDeck(
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val topic: String,
-    // This list will be populated via a separate query, not stored directly as a column
-    @Ignore var cards: MutableList<LearningCard> = mutableListOf(),
     val createdAt: Long = System.currentTimeMillis(),
     var lastLearnedAt: Long? = null
-)
+) {
+    // This list will be populated via a separate query, not stored directly as a column
+    @Ignore
+    var cards: MutableList<LearningCard> = mutableListOf()
+}
