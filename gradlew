@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # Standard Gradle Wrapper script.
 # This script is responsible for downloading and running the correct Gradle version
@@ -17,11 +17,11 @@ if [ -z "$GRADLE_OPTS" ] && [ -z "$JAVA_OPTS" ]; then
 fi
 
 # For Cygwin, ensure paths are in UNIX format before anything is touched
-if $cygwin ; then
-    [ -n "$JAVA_HOME" ] && JAVA_HOME=`cygpath --unix "$JAVA_HOME"`
-    [ -n "$GRADLE_HOME" ] && GRADLE_HOME=`cygpath --unix "$GRADLE_HOME"`
-    [ -n "$GRADLE_OPTS" ] && GRADLE_OPTS=`cygpath --unix "$GRADLE_OPTS"`
-fi
+#if $cygwin ; then
+#    [ -n "$JAVA_HOME" ] && JAVA_HOME=`cygpath --unix "$JAVA_HOME"`
+#    [ -n "$GRADLE_HOME" ] && GRADLE_HOME=`cygpath --unix "$GRADLE_HOME"`
+#    [ -n "$GRADLE_OPTS" ] && GRADLE_OPTS=`cygpath --unix "$GRADLE_OPTS"`
+#fi
 
 # Attempt to find JAVA_HOME if not set
 if [ -z "$JAVA_HOME" ] ; then
