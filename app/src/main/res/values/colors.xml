@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Standard Material Theme Colors (examples, might be different in actual project) -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- App specific base colors (examples) -->
+    <color name="colorPrimary">#007AFF</color>
+    <color name="colorPrimaryDark">#0056B3</color>
+    <color name="colorAccent">#FF9500</color>
+
+    <!-- Glassmorphism specific colors -->
+    <color name="glass_card_background">#80FFFFFF</color> <!-- White with ~50% opacity -->
+    <color name="glass_card_stroke">#B3FFFFFF</color>   <!-- White with ~70% opacity for border -->
+    <color name="glass_dialog_background">#99EEEEEE</color> <!-- Light gray with ~60% opacity -->
+    <color name="glass_text_primary">#E6000000</color>     <!-- Black with ~90% opacity for primary text -->
+    <color name="glass_text_secondary">#B3000000</color>   <!-- Black with ~70% opacity for secondary text -->
+
+    <!-- Background gradient colors -->
+    <color name="bg_gradient_start">#FF6B6B</color> <!-- Light Red -->
+    <color name="bg_gradient_end">#FFE66D</color>   <!-- Light Yellow -->
+</resources>

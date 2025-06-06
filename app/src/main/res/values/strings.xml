@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">MyMaterialApp</string>
+
+    <!-- CreateDeckDialogFragment -->
+    <string name="create_deck_dialog_title">새 학습 덱 만들기</string> <!-- Already in dialog_create_deck.xml layout, but good for programmatic access if needed -->
+    <string name="create_button">생성</string> <!-- Already in dialog_create_deck.xml layout -->
+    <string name="cancel_button">취소</string> <!-- Already in dialog_create_deck.xml layout -->
+    <string name="deck_topic_cards_created_success">\'%1$s\' 덱과 %2$d개의 카드가 생성되었습니다.</string>
+    <string name="deck_creation_db_error">데이터베이스 저장 실패: %s</string>
+    <string name="deck_creation_api_error">카드 생성 실패: %s</string>
+    <string name="empty_topic_error">주제를 입력해주세요.</string>
+
+    <!-- CardLearningActivity -->
+    <string name="loading_deck_text">덱 로딩 중...</string>
+    <string name="deck_id_not_found_error">오류: 덱 ID를 찾을 수 없습니다.</string>
+    <string name="no_cards_left_text">남아있는 카드가 없습니다.</string>
+    <string name="card_position_format">카드 %1$d / %2$d</string> <!-- Format for "Card X of Y" -->
+    <string name="audio_path_not_available">오디오 경로가 없습니다.</string>
+    <string name="audio_path_not_available_error_detail">오디오 경로 없음</string> <!-- For AudioPlaybackUiState error message -->
+    <string name="audio_buffering_message">오디오 준비 중...</string>
+    <string name="audio_playback_error">오디오 재생 중 오류 발생</string> <!-- For Toast and AudioPlaybackUiState error message -->
+    <string name="audio_setup_error_detail">미디어 설정 오류</string> <!-- For AudioPlaybackUiState error message -->
+    <string name="audio_playback_failed_activity_context_error">오디오 재생 기능에 접근할 수 없습니다. (Activity not found)</string>
+
+    <!-- CardStackAdapter (CardViewHolder) -->
+    <string name="info_not_available">정보 없음</string>
+    <string name="examples_not_available">예문 없음</string>
+    <string name="play_pronunciation_button_idle">발음 듣기</string>
+    <string name="play_pronunciation_button_buffering">로딩 중...</string>
+    <string name="play_pronunciation_button_playing">정지</string>
+    <string name="play_pronunciation_button_error">재생 오류</string>
+    <string name="no_audio_file_to_play">재생할 오디오 파일이 없습니다.</string>
+
+    <!-- General -->
+    <string name="hint_enter_deck_topic">학습 주제를 입력하세요</string> <!-- Already in dialog_create_deck.xml layout -->
+
+</resources>
