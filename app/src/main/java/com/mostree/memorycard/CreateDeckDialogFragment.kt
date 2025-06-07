@@ -16,6 +16,7 @@ import com.mostree.memorycard.db.LearningCardDao
 import com.mostree.memorycard.db.LearningDeckDao
 import com.mostree.memorycard.model.LearningCard
 import com.mostree.memorycard.model.LearningDeck
+import com.mostree.memorycard.model.DetailedVocabularyItem // Import DetailedVocabularyItem
 import com.mostree.memorycard.network.ApiResult
 import com.mostree.memorycard.network.GeminiService
 import kotlinx.coroutines.Dispatchers
@@ -84,11 +85,13 @@ class CreateDeckDialogFragment : DialogFragment() {
                     when (result) {
                         is ApiResult.Success -> {
                             val newDeck = LearningDeck(topic = topic)
-                            val generatedItems = result.data // List<Pair<String, String>>
+                            val generatedItems = result.data // Now List<DetailedVocabularyItem>
 
-                            val learningCards = generatedItems.mapIndexed { index, pair ->
-                                val textContent = pair.first
-                                val exampleSentence = pair.second
+                            val learningCards = generatedItems.mapIndexed { index, item -> // item is DetailedVocabularyItem
+                                val textContent = item.text
+                                val exampleSentence = item.example
+                                val etymologyText = item.etymology
+                                val mnemonicText = item.mnemonic
                                 var audioPath: String? = null
 
                                 // Add sample audio URL for the first card for testing
@@ -103,9 +106,10 @@ class CreateDeckDialogFragment : DialogFragment() {
                                 LearningCard(
                                     deckId = newDeck.id,
                                     text = textContent,
-                                    examples = listOf(exampleSentence),
-                                    pronunciationAudioPath = audioPath // Assign the audio path
-                                    // Other fields like etymology, mnemonic can be added if API provides them
+                                    examples = listOf(exampleSentence), // Assuming examples is List<String> in LearningCard
+                                    etymology = etymologyText,
+                                    mnemonic = mnemonicText,
+                                    pronunciationAudioPath = audioPath
                                 )
                             }
 
