@@ -7,8 +7,8 @@ import android.widget.Toast
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mymaterialapp.databinding.ItemLearningCardBinding
-import com.example.mymaterialapp.model.LearningCard
+import com.mostree.memorycard.databinding.ItemLearningCardBinding
+import com.mostree.memorycard.model.LearningCard
 import kotlinx.coroutines.launch
 
 /**
