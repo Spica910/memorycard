@@ -86,10 +86,10 @@ class CreateDeckDialogFragment : DialogFragment() {
                             is ApiResult.Success -> {
                                 Log.d("GeminiDebug", "API Success. Data: ${result.data}")
                                 if (result.data.isEmpty()) {
-                                    Log.w("GeminiDebug", "API returned success but data is empty for '토플단어 10개'.")
+                                    Log.w("GeminiDebug", "API returned success but data (CardPrototype list) is empty for '토플단어 10개'.")
                                 } else {
-                                    result.data.forEachIndexed { index, pair ->
-                                        Log.d("GeminiDebug", "Item $index: Word='${pair.first}', Translation='${pair.second}'")
+                                    result.data.forEachIndexed { index, proto ->
+                                        Log.d("GeminiDebug", "Item $index: Word='${proto.word}', Translation='${proto.translation}', Example='${proto.example}'")
                                     }
                                 }
                             }
@@ -102,13 +102,11 @@ class CreateDeckDialogFragment : DialogFragment() {
                     when (result) {
                         is ApiResult.Success -> {
                             val newDeck = LearningDeck(topic = topic)
-                            val generatedItems = result.data // List<Pair<String, String>>
+                            // generatedItems is now List<CardPrototype>
+                            val generatedItems = result.data
 
-                            val learningCards = generatedItems.mapIndexed { index, pair ->
-                                val textContent = pair.first
-                                val exampleSentence = pair.second
+                            val learningCards = generatedItems.mapIndexed { index, prototype ->
                                 var audioPath: String? = null
-
                                 // Add sample audio URL for the first card for testing
                                 if (index == 0) {
                                     audioPath = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
@@ -120,10 +118,12 @@ class CreateDeckDialogFragment : DialogFragment() {
 
                                 LearningCard(
                                     deckId = newDeck.id,
-                                    text = textContent,
-                                    examples = listOf(exampleSentence),
-                                    pronunciationAudioPath = audioPath // Assign the audio path
-                                    // Other fields like etymology, mnemonic can be added if API provides them
+                                    text = prototype.word,
+                                    translation = prototype.translation,
+                                    examples = listOf(prototype.example), // Example becomes a list with one item
+                                    pronunciationAudioPath = audioPath,
+                                    etymology = null, // Initialize as null
+                                    mnemonic = null   // Initialize as null
                                 )
                             }
 

@@ -87,6 +87,14 @@ class CardStackAdapter(
             binding.layoutDetailedInfo.visibility = View.GONE
             binding.textViewCardText.text = card.text
 
+            // Bind Translation
+            if (!card.translation.isNullOrEmpty()) {
+                binding.textViewCardTranslation.text = card.translation
+                binding.textViewCardTranslation.visibility = View.VISIBLE
+            } else {
+                binding.textViewCardTranslation.visibility = View.GONE
+            }
+
             // Bind Etymology
             val etymologyAvailable = !card.etymology.isNullOrEmpty()
             binding.textViewEtymologyLabel.visibility = if (etymologyAvailable) View.VISIBLE else View.GONE

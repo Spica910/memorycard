@@ -19,7 +19,8 @@ import java.util.UUID
 data class LearningCard(
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val deckId: String, // Foreign key to LearningDeck
-    val text: String,
+    val text: String, // English word
+    val translation: String?, // Korean translation
     var isKnown: Boolean = false,
     val etymology: String? = null,
     val mnemonic: String? = null,
