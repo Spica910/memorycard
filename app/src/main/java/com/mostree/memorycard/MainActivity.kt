@@ -5,9 +5,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.mymaterialapp.databinding.ActivityMainBinding
-import com.example.mymaterialapp.db.LearningDeckDao
-import com.example.mymaterialapp.model.LearningDeck
+import com.mostree.memorycard.R
+import com.mostree.memorycard.databinding.ActivityMainBinding
+import com.mostree.memorycard.db.LearningDeckDao
+import com.mostree.memorycard.model.LearningDeck
 import kotlinx.coroutines.launch
 
 /**

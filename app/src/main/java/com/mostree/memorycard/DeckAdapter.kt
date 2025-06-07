@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mymaterialapp.model.LearningDeck
+import com.mostree.memorycard.model.LearningDeck
 
 // This is the version that was using List<String>
 class DeckAdapter(private var decks: List<LearningDeck>) : RecyclerView.Adapter<DeckAdapter.DeckViewHolder>() {
