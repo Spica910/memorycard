@@ -5,8 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.mymaterialapp.model.LearningCard
-import com.example.mymaterialapp.model.LearningDeck
+import com.mostree.memorycard.model.LearningCard
+import com.mostree.memorycard.model.LearningDeck
 
 @Database(entities = [LearningDeck::class, LearningCard::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
