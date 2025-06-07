@@ -2,6 +2,7 @@ package com.mostree.memorycard.network
 
 import android.util.Log
 import com.mostree.memorycard.BuildConfig // To access GEMINI_API_KEY
+import com.mostree.memorycard.model.DetailedVocabularyItem // Import new data class
 import kotlinx.coroutines.delay // For simulating network delay with mock data
 
 /**
@@ -44,10 +45,10 @@ object GeminiService {
      *       making the network request, and parsing the actual response.
      *
      * @param topic The topic for which to generate vocabulary.
-     * @return An [ApiResult] containing a list of pairs (word/phrase to example sentence) on success,
+     * @return An [ApiResult] containing a list of [DetailedVocabularyItem] on success,
      *         or an [ApiResult.Error] on failure or if an error is simulated.
      */
-    suspend fun generateVocabulary(topic: String): ApiResult<List<Pair<String, String>>> {
+    suspend fun generateVocabulary(topic: String): ApiResult<List<DetailedVocabularyItem>> {
         val apiKey = BuildConfig.GEMINI_API_KEY
         Log.d(MOCK_TAG, "Generating MOCK vocabulary for topic: $topic. API Key (first 5 chars): ${apiKey.take(5)}...")
 
@@ -56,11 +57,66 @@ object GeminiService {
 
         // Mock data generation
         val mockData = listOf(
-            Pair("$topic - Word 1 (Mock)", "This is a mock example sentence for Word 1 related to $topic."),
-            Pair("$topic - Phrase 1 (Mock)", "A common mock phrase about $topic to learn."),
-            Pair("$topic - Word 2 (Mock)", "Another mock word for $topic with its example."),
-            Pair("$topic - Idiom 1 (Mock)", "Mock idioms can also be about $topic."),
-            Pair("$topic - Word 3 (Mock)", "Final mock word for $topic in this list.")
+            DetailedVocabularyItem(
+                text = "$topic - Word 1 (Mock)",
+                example = "This is a mock example sentence for Word 1 related to $topic.",
+                etymology = "Mock etymology for Word 1: from Old Mockish 'wrd'.",
+                mnemonic = "Mock mnemonic for Word 1: think of a 'word' in a 'mocking' bird's song."
+            ),
+            DetailedVocabularyItem(
+                text = "$topic - Phrase 1 (Mock)",
+                example = "A common mock phrase about $topic to learn.",
+                etymology = "Mock etymology for Phrase 1: combination of 'phras' and 'mock'.",
+                mnemonic = "Mock mnemonic for Phrase 1: 'phrase' it like you 'mock' it."
+            ),
+            DetailedVocabularyItem(
+                text = "$topic - Word 2 (Mock)",
+                example = "Another mock word for $topic with its example.",
+                etymology = "Mock etymology for Word 2: from Medieval Mock 'woord'.",
+                mnemonic = "Mock mnemonic for Word 2: two 'words' make a 'mock'."
+            ),
+            DetailedVocabularyItem(
+                text = "$topic - Idiom 1 (Mock)",
+                example = "Mock idioms can also be about $topic.",
+                etymology = "Mock etymology for Idiom 1: 'idio' + 'mock' meaning peculiar mockery.",
+                mnemonic = "Mock mnemonic for Idiom 1: 'idiots' sometimes 'mock' things."
+            ),
+            DetailedVocabularyItem(
+                text = "$topic - Word 3 (Mock)",
+                example = "Final mock word for $topic in this list.",
+                etymology = "Mock etymology for Word 3: from High Mock 'wort'.",
+                mnemonic = "Mock mnemonic for Word 3: three 'mocks' a charm for this 'word'."
+            ),
+            DetailedVocabularyItem(
+                text = "$topic - Word 4 (Mock)",
+                example = "Example sentence for Word 4 about $topic.",
+                etymology = "Mock etymology for Word 4: from Proto-Mockish 'werd'.",
+                mnemonic = "Mock mnemonic for Word 4: 'four' 'words' to 'mock' it up."
+            ),
+            DetailedVocabularyItem(
+                text = "$topic - Phrase 2 (Mock)",
+                example = "Another phrase related to $topic for learning.",
+                etymology = "Mock etymology for Phrase 2: see Phrase 1, but doubled.",
+                mnemonic = "Mock mnemonic for Phrase 2: second 'phrase', double the 'mock'."
+            ),
+            DetailedVocabularyItem(
+                text = "$topic - Word 5 (Mock)",
+                example = "Mock word 5 and its usage in $topic.",
+                etymology = "Mock etymology for Word 5: from Low Mock 'wurd'.",
+                mnemonic = "Mock mnemonic for Word 5: high 'five' for this 'mock' 'word'."
+            ),
+            DetailedVocabularyItem(
+                text = "$topic - Idiom 2 (Mock)",
+                example = "More mock idioms concerning $topic.",
+                etymology = "Mock etymology for Idiom 2: variant of Idiom 1.",
+                mnemonic = "Mock mnemonic for Idiom 2: another 'idiom' to 'mock'."
+            ),
+            DetailedVocabularyItem(
+                text = "$topic - Word 6 (Mock)",
+                example = "The sixth mock word for $topic.",
+                etymology = "Mock etymology for Word 6: numeral 'six' + 'wrd'.",
+                mnemonic = "Mock mnemonic for Word 6: 'six' 'words' a 'mocking'."
+            )
         )
 
         // Example of how to simulate an error for testing purposes:
@@ -87,15 +143,20 @@ object GeminiService {
      * @return A list of pairs, where each pair contains a word/phrase and its corresponding definition/example.
      */
     @Suppress("unused") // Suppressed because it's not used by the current mock logic
-    private fun parseVocabularyResponse(responseText: String): List<Pair<String, String>> {
-        val items = mutableListOf<Pair<String, String>>()
+    private fun parseVocabularyResponse(responseText: String): List<DetailedVocabularyItem> {
+        // This function would need to be updated if it were to parse into DetailedVocabularyItem
+        // For now, its signature is changed to match the new expectation, but the logic is not used.
+        val items = mutableListOf<DetailedVocabularyItem>()
         responseText.lines().forEach { line ->
             if (line.isNotBlank()) {
-                val parts = line.split("###", limit = 2)
-                if (parts.size == 2) {
-                    items.add(Pair(parts[0].trim(), parts[1].trim()))
-                } else {
-                    Log.w(MOCK_TAG, "Could not parse line from response: $line")
+                val parts = line.split("###", limit = 4) // Assuming format: text###example###etymology###mnemonic
+                if (parts.size == 4) {
+                    items.add(DetailedVocabularyItem(parts[0].trim(), parts[1].trim(), parts[2].trim(), parts[3].trim()))
+                } else if (parts.size == 2) { // Fallback for old format or missing optional fields
+                     items.add(DetailedVocabularyItem(parts[0].trim(), parts[1].trim()))
+                }
+                else {
+                    Log.w(MOCK_TAG, "Could not parse line into DetailedVocabularyItem: $line")
                 }
             }
         }
