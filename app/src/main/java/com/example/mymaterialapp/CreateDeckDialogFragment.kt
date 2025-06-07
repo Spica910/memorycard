@@ -79,6 +79,26 @@ class CreateDeckDialogFragment : DialogFragment() {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val result = GeminiService.generateVocabulary(topic) // suspend call
 
+                    // Add this logging block
+                    if (topic == "토플단어 10개") {
+                        Log.d("GeminiDebug", "Topic: $topic")
+                        when (result) {
+                            is ApiResult.Success -> {
+                                Log.d("GeminiDebug", "API Success. Data: ${result.data}")
+                                if (result.data.isEmpty()) {
+                                    Log.w("GeminiDebug", "API returned success but data is empty for '토플단어 10개'.")
+                                } else {
+                                    result.data.forEachIndexed { index, pair ->
+                                        Log.d("GeminiDebug", "Item $index: Word='${pair.first}', Translation='${pair.second}'")
+                                    }
+                                }
+                            }
+                            is ApiResult.Error -> {
+                                Log.e("GeminiDebug", "API Error. Message: ${result.message}")
+                            }
+                        }
+                    }
+
                     when (result) {
                         is ApiResult.Success -> {
                             val newDeck = LearningDeck(topic = topic)
