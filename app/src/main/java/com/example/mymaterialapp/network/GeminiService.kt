@@ -1,12 +1,8 @@
-package com.example.mymaterialapp.network
+package com.mostree.memorycard.network
 
 import android.util.Log
 import com.example.mymaterialapp.BuildConfig // To access GEMINI_API_KEY
-import com.google.ai.client.generativeai.GenerativeModel
-// Consider adding import com.google.ai.client.generativeai.type.GenerateContentResponse (if accessing specific response fields beyond .text)
-// import com.google.ai.client.generativeai.type.generationBlockedError (if specific structured error handling is needed)
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.delay // For simulating network delay with mock data
 
 /**
  * Sealed class representing the result of an API operation.
@@ -30,113 +26,78 @@ sealed class ApiResult<out T> {
 }
 
 /**
- * Data class to hold the parsed components from the API response before mapping to LearningCard.
- */
-data class CardPrototype(
-    val word: String,
-    val translation: String,
-    val example: String
-)
-
-/**
- * Service object for interacting with the Gemini API.
+ * Service object for interacting with the Gemini API (currently mocked).
  * Provides methods to generate vocabulary and other content based on topics.
  */
 object GeminiService {
 
-    private const val SERVICE_TAG = "GeminiService"
+    private const val MOCK_TAG = "GeminiServiceMock"
 
     /**
-     * Generates a list of vocabulary items (word, translation, example sentence) based on the given topic
-     * using the Gemini API.
+     * Generates a list of vocabulary items (word/phrase and example sentence) based on the given topic.
+     *
+     * NOTE: This implementation currently returns MOCK data and simulates a network delay.
+     * The API key from [BuildConfig] is logged for verification but not used in the mock call.
+     *
+     * TODO: Replace with actual Gemini API call when the client library and setup are finalized.
+     *       This will involve using an appropriate API client, handling authentication with the API key,
+     *       making the network request, and parsing the actual response.
      *
      * @param topic The topic for which to generate vocabulary.
-     * @return An [ApiResult] containing a list of [CardPrototype] objects on success,
-     *         or an [ApiResult.Error] on failure.
+     * @return An [ApiResult] containing a list of pairs (word/phrase to example sentence) on success,
+     *         or an [ApiResult.Error] on failure or if an error is simulated.
      */
-    suspend fun generateVocabulary(topic: String): ApiResult<List<CardPrototype>> {
-        Log.d(SERVICE_TAG, "Requesting vocabulary for topic: $topic. API Key (first 5 chars): ${BuildConfig.GEMINI_API_KEY.take(5)}...")
+    suspend fun generateVocabulary(topic: String): ApiResult<List<Pair<String, String>>> {
+        val apiKey = BuildConfig.GEMINI_API_KEY
+        Log.d(MOCK_TAG, "Generating MOCK vocabulary for topic: $topic. API Key (first 5 chars): ${apiKey.take(5)}...")
 
-        val generativeModel = GenerativeModel(
-            modelName = "gemini-pro", // Or "gemini-1.0-pro" or other suitable model
-            apiKey = BuildConfig.GEMINI_API_KEY
+        // Simulate network delay
+        delay(1500) // milliseconds
+
+        // Mock data generation
+        val mockData = listOf(
+            Pair("$topic - Word 1 (Mock)", "This is a mock example sentence for Word 1 related to $topic."),
+            Pair("$topic - Phrase 1 (Mock)", "A common mock phrase about $topic to learn."),
+            Pair("$topic - Word 2 (Mock)", "Another mock word for $topic with its example."),
+            Pair("$topic - Idiom 1 (Mock)", "Mock idioms can also be about $topic."),
+            Pair("$topic - Word 3 (Mock)", "Final mock word for $topic in this list.")
         )
 
-        val prompt = """
-            Generate a list of 5 English vocabulary words, their Korean translations, and an example sentence in English for each, related to the topic: '$topic'.
-            Format each item strictly as:
-            English Word ### Korean Translation ### English Example Sentence
-            Provide only the list, one item per line. Do not include any introductory text, concluding text, numbering, or bullet points.
-            For example, if the topic is 'technology':
-            Innovation ### 혁신 ### Regular software updates drive technological innovation.
-            Algorithm ### 알고리즘 ### Search engines use complex algorithms to rank pages.
-        """.trimIndent()
+        // Example of how to simulate an error for testing purposes:
+        // if (topic.equals("error_test", ignoreCase = true)) {
+        //     Log.w(MOCK_TAG, "Simulating API error for topic '$topic'.")
+        //     // For user-facing errors, consider using string resources if the message is static.
+        //     // Here, the message includes the dynamic 'topic', so it's constructed.
+        //     // The calling code (e.g., DialogFragment) should use string resources for the generic part of the error display.
+        //     return ApiResult.Error("Simulated API error for topic '$topic'.")
+        // }
 
-        Log.d(SERVICE_TAG, "Prompt for topic '$topic':\n$prompt")
-
-        return withContext(Dispatchers.IO) {
-            try {
-                val response = generativeModel.generateContent(prompt)
-                val responseText = response.text
-                Log.d(SERVICE_TAG, "Raw API response for topic '$topic':\n$responseText")
-
-                if (responseText != null) {
-                    val parsedData = parseActualApiResponse(responseText)
-                    if (parsedData.isNotEmpty()) {
-                        Log.i(SERVICE_TAG, "Successfully parsed ${parsedData.size} CardPrototype items for topic: $topic")
-                        ApiResult.Success(parsedData)
-                    } else {
-                        Log.w(SERVICE_TAG, "API response parsed to empty list of CardPrototype for topic: $topic. Response: $responseText")
-                        ApiResult.Error("No vocabulary data received from API or failed to parse to CardPrototype for topic: $topic. Response: $responseText")
-                    }
-                } else {
-                    Log.e(SERVICE_TAG, "API response text is null for topic: $topic. Full response object: $response")
-                    val blockReason = response.promptFeedback?.blockReason?.name
-                    val finishReason = response.candidates.firstOrNull()?.finishReason?.name
-                    val safetyRatings = response.promptFeedback?.safetyRatings?.joinToString { "${it.category}: ${it.probability}" }
-                    val errorDetails = "Block reason: $blockReason, Finish reason: $finishReason, Safety ratings: $safetyRatings"
-                    ApiResult.Error("Received empty response from API for topic: $topic. Details: $errorDetails")
-                }
-            } catch (e: Exception) {
-                Log.e(SERVICE_TAG, "API call failed for topic: $topic", e)
-                ApiResult.Error("API call failed for topic: $topic. Error: ${e.message}", e)
-            }
-        }
+        Log.d(MOCK_TAG, "Successfully generated MOCK data for topic: $topic")
+        return ApiResult.Success(mockData)
     }
 
     /**
-     * Parses a raw text response from the Gemini API into a list of [CardPrototype] objects.
-     * Assumes each relevant line in the responseText is formatted as:
-     * "English Word ### Korean Translation ### English Example Sentence"
+     * Parses a raw text response (assumed to be from an API) into a list of word/example pairs.
+     * This function assumes a specific format where each line is "word/phrase ### definition/example".
+     *
+     * NOTE: Not directly used by the current mock implementation of [generateVocabulary] but
+     *       is kept as a utility for potential future use with a real API response.
      *
      * @param responseText The raw text response from the API.
-     * @return A list of [CardPrototype] objects.
+     * @return A list of pairs, where each pair contains a word/phrase and its corresponding definition/example.
      */
-    private fun parseActualApiResponse(responseText: String): List<CardPrototype> {
-        val items = mutableListOf<CardPrototype>()
+    @Suppress("unused") // Suppressed because it's not used by the current mock logic
+    private fun parseVocabularyResponse(responseText: String): List<Pair<String, String>> {
+        val items = mutableListOf<Pair<String, String>>()
         responseText.lines().forEach { line ->
-            val trimmedLine = line.trim()
-            if (trimmedLine.isNotBlank()) {
-                val parts = trimmedLine.split("###", limit = 3)
-                if (parts.size == 3) {
-                    val word = parts[0].trim()
-                    val translation = parts[1].trim()
-                    val example = parts[2].trim()
-                    if (word.isNotEmpty() && translation.isNotEmpty() && example.isNotEmpty()) {
-                        items.add(CardPrototype(word, translation, example))
-                        Log.d(SERVICE_TAG, "Parsed CardPrototype: Word='$word', Translation='$translation', Example='$example'")
-                    } else {
-                        Log.w(SERVICE_TAG, "Skipping line due to empty parts after parsing (word, translation, or example): '$trimmedLine'")
-                    }
+            if (line.isNotBlank()) {
+                val parts = line.split("###", limit = 2)
+                if (parts.size == 2) {
+                    items.add(Pair(parts[0].trim(), parts[1].trim()))
                 } else {
-                    Log.w(SERVICE_TAG, "Could not parse line into 3 parts for CardPrototype (expected 'Word ### Translation ### Example'): '$trimmedLine'")
+                    Log.w(MOCK_TAG, "Could not parse line from response: $line")
                 }
             }
-        }
-        if (items.isEmpty() && responseText.isNotBlank() && !responseText.contains("###")) {
-            Log.w(SERVICE_TAG, "Parsing CardPrototype resulted in an empty list. The response text was not blank and did not contain '###', indicating a possible fundamental format mismatch from the API. Response:\n$responseText")
-        } else if (items.isEmpty() && responseText.isNotBlank()) {
-             Log.w(SERVICE_TAG, "Parsing CardPrototype resulted in an empty list, but the response text was not blank. This might indicate a format mismatch (e.g. wrong delimiter or structure) from the API. Response:\n$responseText")
         }
         return items
     }

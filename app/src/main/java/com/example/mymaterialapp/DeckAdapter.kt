@@ -1,4 +1,4 @@
-package com.example.mymaterialapp
+package com.mostree.memorycard
 
 import android.content.Intent
 import android.view.LayoutInflater

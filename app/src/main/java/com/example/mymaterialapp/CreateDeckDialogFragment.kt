@@ -1,4 +1,4 @@
-package com.example.mymaterialapp
+package com.mostree.memorycard
 
 import android.content.Context
 import android.os.Bundle
@@ -79,34 +79,16 @@ class CreateDeckDialogFragment : DialogFragment() {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val result = GeminiService.generateVocabulary(topic) // suspend call
 
-                    // Add this logging block
-                    if (topic == "토플단어 10개") {
-                        Log.d("GeminiDebug", "Topic: $topic")
-                        when (result) {
-                            is ApiResult.Success -> {
-                                Log.d("GeminiDebug", "API Success. Data: ${result.data}")
-                                if (result.data.isEmpty()) {
-                                    Log.w("GeminiDebug", "API returned success but data (CardPrototype list) is empty for '토플단어 10개'.")
-                                } else {
-                                    result.data.forEachIndexed { index, proto ->
-                                        Log.d("GeminiDebug", "Item $index: Word='${proto.word}', Translation='${proto.translation}', Example='${proto.example}'")
-                                    }
-                                }
-                            }
-                            is ApiResult.Error -> {
-                                Log.e("GeminiDebug", "API Error. Message: ${result.message}")
-                            }
-                        }
-                    }
-
                     when (result) {
                         is ApiResult.Success -> {
                             val newDeck = LearningDeck(topic = topic)
-                            // generatedItems is now List<CardPrototype>
-                            val generatedItems = result.data
+                            val generatedItems = result.data // List<Pair<String, String>>
 
-                            val learningCards = generatedItems.mapIndexed { index, prototype ->
+                            val learningCards = generatedItems.mapIndexed { index, pair ->
+                                val textContent = pair.first
+                                val exampleSentence = pair.second
                                 var audioPath: String? = null
+
                                 // Add sample audio URL for the first card for testing
                                 if (index == 0) {
                                     audioPath = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
@@ -118,12 +100,10 @@ class CreateDeckDialogFragment : DialogFragment() {
 
                                 LearningCard(
                                     deckId = newDeck.id,
-                                    text = prototype.word,
-                                    translation = prototype.translation,
-                                    examples = listOf(prototype.example), // Example becomes a list with one item
-                                    pronunciationAudioPath = audioPath,
-                                    etymology = null, // Initialize as null
-                                    mnemonic = null   // Initialize as null
+                                    text = textContent,
+                                    examples = listOf(exampleSentence),
+                                    pronunciationAudioPath = audioPath // Assign the audio path
+                                    // Other fields like etymology, mnemonic can be added if API provides them
                                 )
                             }
 

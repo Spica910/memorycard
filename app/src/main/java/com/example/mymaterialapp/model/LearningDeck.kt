@@ -1,4 +1,4 @@
-package com.example.mymaterialapp.model
+package com.mostree.memorycard.model
 
 import androidx.room.Entity
 import androidx.room.Ignore
