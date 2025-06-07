@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.mymaterialapp'
+    namespace 'com.mostree.memorycard'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.mymaterialapp"
+        applicationId "com.mostree.memorycard"
         minSdk 21
         targetSdk 34
         versionCode 1
