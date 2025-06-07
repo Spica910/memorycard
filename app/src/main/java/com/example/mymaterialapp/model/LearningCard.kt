@@ -1,4 +1,4 @@
-package com.example.mymaterialapp.model
+package com.mostree.memorycard.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -19,8 +19,7 @@ import java.util.UUID
 data class LearningCard(
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val deckId: String, // Foreign key to LearningDeck
-    val text: String, // English word
-    val translation: String?, // Korean translation
+    val text: String,
     var isKnown: Boolean = false,
     val etymology: String? = null,
     val mnemonic: String? = null,

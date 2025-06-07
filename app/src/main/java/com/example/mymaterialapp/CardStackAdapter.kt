@@ -1,4 +1,4 @@
-package com.example.mymaterialapp
+package com.mostree.memorycard
 
 import android.view.LayoutInflater
 import android.view.View
@@ -86,14 +86,6 @@ class CardStackAdapter(
             // Reset visibility state for recycled views
             binding.layoutDetailedInfo.visibility = View.GONE
             binding.textViewCardText.text = card.text
-
-            // Bind Translation
-            if (!card.translation.isNullOrEmpty()) {
-                binding.textViewCardTranslation.text = card.translation
-                binding.textViewCardTranslation.visibility = View.VISIBLE
-            } else {
-                binding.textViewCardTranslation.visibility = View.GONE
-            }
 
             // Bind Etymology
             val etymologyAvailable = !card.etymology.isNullOrEmpty()

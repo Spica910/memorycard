@@ -1,4 +1,4 @@
-package com.example.mymaterialapp.db
+package com.mostree.memorycard.db
 
 import androidx.room.*
 import com.example.mymaterialapp.model.LearningCard
