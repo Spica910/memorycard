@@ -1,4 +1,4 @@
-package com.example.mymaterialapp
+package com.mostree.memorycard
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -9,10 +9,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mymaterialapp.databinding.ActivityCardLearningBinding
-import com.example.mymaterialapp.db.LearningCardDao
-import com.example.mymaterialapp.db.LearningDeckDao
-import com.example.mymaterialapp.model.LearningCard
+import com.mostree.memorycard.databinding.ActivityCardLearningBinding
+import com.mostree.memorycard.db.LearningCardDao
+import com.mostree.memorycard.db.LearningDeckDao
+import com.mostree.memorycard.model.LearningCard
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
