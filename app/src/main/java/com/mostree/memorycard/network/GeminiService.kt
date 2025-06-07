@@ -1,7 +1,7 @@
 package com.mostree.memorycard.network
 
 import android.util.Log
-import com.mostree.memorycard.BuildConfig // To access GEMINI_API_KEY
+import com.example.mymaterialapp.BuildConfig // To access GEMINI_API_KEY
 import kotlinx.coroutines.delay // For simulating network delay with mock data
 
 /**
