@@ -143,30 +143,44 @@ class CardLearningActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 if (position == RecyclerView.NO_POSITION || position >= currentCards.size) {
-                    cardAdapter.notifyItemChanged(position) // Reset swipe visual
-                    return
+                    Log.w("SwipeAction", "Invalid position ($position) or position out of bounds (size: ${currentCards.size}). Returning.")
+                    return // Simply return without notifying adapter for an invalid position
                 }
 
+                Log.d("SwipeAction_GENERAL", "onSwiped: position = $position, direction = $direction, card = ${currentCards.getOrNull(position)?.text}")
+
                 val swipedCard = currentCards.removeAt(position)
+                // This initial removal notification is important.
                 cardAdapter.notifyItemRemoved(position)
+                Log.d("SwipeAction_GENERAL", "Removed card '${swipedCard.text}' from position $position. Notified item removed.")
 
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
                         swipedCard.isKnown = true
-                        Log.d("SwipeAction", "Card '${swipedCard.text}' marked as KNOWN.")
+                        Log.d("SwipeAction_LEFT", "Card '${swipedCard.text}' marked as KNOWN.")
+                        // Specific logging for LEFT if needed in the future.
                     }
                     ItemTouchHelper.RIGHT -> {
                         swipedCard.isKnown = false
+                        Log.d("SwipeAction_RIGHT", "Processing RIGHT swipe for card '${swipedCard.text}'. Original position was $position.")
+                        Log.d("SwipeAction_RIGHT", "State before adding back: currentCards size = ${currentCards.size}, current list: ${currentCards.map { it.text }}")
+
                         currentCards.add(swipedCard) // Add to end of the current session's list
-                        cardAdapter.notifyItemInserted(currentCards.size - 1)
-                        Log.d("SwipeAction", "Card '${swipedCard.text}' marked as UNKNOWN and moved to session end.")
+                        Log.d("SwipeAction_RIGHT", "State after adding back: currentCards size = ${currentCards.size}, last card: ${currentCards.lastOrNull()?.text}, current list: ${currentCards.map { it.text }}")
+
+                        cardAdapter.notifyDataSetChanged() // Using notifyDataSetChanged for testing
+                        Log.d("SwipeAction_RIGHT", "notifyDataSetChanged() called. Adapter itemCount from cardAdapter.itemCount: ${cardAdapter.itemCount}")
+
+                        Log.d("SwipeAction_RIGHT", "Card '${swipedCard.text}' (now at end of list) marked as UNKNOWN.")
                     }
                 }
 
                 lifecycleScope.launch {
-                    cardDao.updateCard(swipedCard) // Persist change to DB
+                    cardDao.updateCard(swipedCard)
+                    Log.d("SwipeAction_DB", "Card '${swipedCard.text}' (isKnown: ${swipedCard.isKnown}) update sent to DAO.")
                 }
-                updateCardPositionDisplay()
+                updateCardPositionDisplay() // This will show "Card 1 of X"
+                Log.d("SwipeAction_GENERAL", "updateCardPositionDisplay called. Current visible card (should be new card at pos 0 if list not empty): ${currentCards.firstOrNull()?.text}")
             }
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
