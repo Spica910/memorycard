@@ -1,7 +1,7 @@
 package com.mostree.memorycard.db
 
 import androidx.room.*
-import com.example.mymaterialapp.model.LearningCard
+import com.mostree.memorycard.model.LearningCard
 import kotlinx.coroutines.flow.Flow
 
 @Dao
