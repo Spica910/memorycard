@@ -1,7 +1,7 @@
-package com.mostree.memorycard.db
+package com.example.mymaterialapp.db
 
 import androidx.room.*
-import com.mostree.memorycard.model.LearningDeck
+import com.example.mymaterialapp.model.LearningDeck
 import kotlinx.coroutines.flow.Flow // For Flow-based observation
 
 @Dao
